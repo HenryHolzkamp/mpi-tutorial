@@ -1,2 +1,10 @@
 .vscode
 python/mpi_env
+*.pdf
+*.gif
+*.png
+*.jpg
+*.jpeg
+*.bmp
+*.tif
+*.gif
