@@ -27,8 +27,6 @@ def solve_poisson_1d(N, L, charge_distribution, tol=1e-10, max_iter=10000):
 
     # Jacobi iteration
     for iteration in range(max_iter):
-        u_old = u_local.copy()
-
         # Exchange ghost nodes using non-blocking communication
         send_buf_left = np.array([u_local[1]], dtype='d')
         recv_buf_left = np.array([u_local[0]], dtype='d')
@@ -57,6 +55,7 @@ def solve_poisson_1d(N, L, charge_distribution, tol=1e-10, max_iter=10000):
         u_local[-1] = recv_buf_right[0]
 
         # Update interior points
+        u_old = u_local.copy()
         for i in range(1, local_N - 1):
             u_local[i] = 0.5 * (u_old[i-1] + u_old[i+1] - dx**2 * f_local[i])
 
