@@ -8,3 +8,4 @@ python/mpi_env
 *.bmp
 *.tif
 *.gif
+*__pycache__
