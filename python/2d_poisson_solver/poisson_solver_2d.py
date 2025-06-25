@@ -32,7 +32,7 @@ def solve_poisson_2d(n, l, f, periods=[False,False], tol=1e-8, max_iter=100000):
 
     # --- Scatter subdomains --- #
     f_local[1:-1, 1:-1] = scatter_subdomains(f, nx_global, ny_global, nx_local, ny_local, 
-                                             dims, MPI_rank, comm)
+                                             dims, MPI_rank, cart_comm)
     
 
     # --- Jacobi iterations loop --- #
@@ -41,13 +41,13 @@ def solve_poisson_2d(n, l, f, periods=[False,False], tol=1e-8, max_iter=100000):
 
         # --- Exchange ghost rows (north/south) --- #
         # Send north, receive south (tag = 0)
-        north_send = u_local[1:-1,1].copy()
+        north_send = u_local[1,1:-1].copy()
         south_recv = np.empty_like(north_send)
         reqs.append(cart_comm.Isend(north_send, dest=north, tag=0))
         reqs.append(cart_comm.Irecv(south_recv, source=south, tag=0))
         
         # Send south, receive north (tag = 1)
-        south_send = u_local[1:-1,1].copy()
+        south_send = u_local[-2,1:-1].copy()
         north_recv = np.empty_like(south_send)
         reqs.append(cart_comm.Isend(south_send, dest=south, tag=1))
         reqs.append(cart_comm.Irecv(north_recv, source=north, tag=1))
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     N = 200  # Number of grid points per dimension
     L = 10   # Domain length
 
-    # Example: 4 point charges in the middle of the domain
+    # Example: 
     f = np.zeros((N, N))
     f[N // 4, N // 4] = -1
     f[3 * N // 4, N // 4] = 1
