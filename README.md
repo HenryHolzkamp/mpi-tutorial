@@ -1,5 +1,5 @@
 # mpi-tutorial
-Created this git repository for learning MPI.
+Created this git repository for learning MPI. Used the Python examples for the lecture "Space Plasma Physics" in SoSe 2025.
 
 ## Sources
 * [MPI-Tutorial](https://mpitutorial.com/tutorials/)
